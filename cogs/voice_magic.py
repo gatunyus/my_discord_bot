@@ -36,7 +36,22 @@ if not discord.opus.is_loaded():
         except Exception:
             continue
 
-FFMPEG_PATH = shutil.which("ffmpeg") or "/opt/homebrew/bin/ffmpeg"
+def _resolve_ffmpeg_path() -> str:
+    """หาพาธ ffmpeg จากระบบก่อน ถ้าโฮสต์บอทไม่มีให้ดึงจาก imageio-ffmpeg อัตโนมัติ"""
+    sys_ffmpeg = shutil.which("ffmpeg")
+    if sys_ffmpeg:
+        return sys_ffmpeg
+    if os.path.exists("/opt/homebrew/bin/ffmpeg"):
+        return "/opt/homebrew/bin/ffmpeg"
+    try:
+        import imageio_ffmpeg
+
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    except Exception:
+        return "ffmpeg"
+
+
+FFMPEG_PATH = _resolve_ffmpeg_path()
 
 
 def list_sound_files() -> list[str]:

@@ -1,9 +1,18 @@
 import aiosqlite
 import os
+import shutil
 
-DB_PATH = os.getenv("DB_PATH", os.path.join(os.path.dirname(__file__), "bot_data.db"))
+_LOCAL_SEED_DB = os.path.join(os.path.dirname(__file__), "bot_data.db")
+DB_PATH = os.getenv("DB_PATH", _LOCAL_SEED_DB)
 if os.path.dirname(DB_PATH):
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+
+# ถ้าย้ายขึ้น Cloud (เช่น DB_PATH=/data/bot_data.db) ครั้งแรกแล้วไฟล์ใน Volume ยังไม่มี ให้ยกข้อมูลเดิมไปตั้งต้นให้อัตโนมัติ
+if DB_PATH != _LOCAL_SEED_DB and not os.path.exists(DB_PATH) and os.path.exists(_LOCAL_SEED_DB):
+    try:
+        shutil.copy2(_LOCAL_SEED_DB, DB_PATH)
+    except Exception:
+        pass
 
 
 async def init_db():

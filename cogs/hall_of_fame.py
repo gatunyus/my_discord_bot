@@ -30,8 +30,17 @@ def create_quote_image(text: str, author_name: str, avatar_bytes: bytes = None) 
         except Exception:
             pass
 
-    # โหลดฟอนต์ระบบ (รองรับภาษาไทยบน macOS / Windows / Linux Cloud)
-    font_paths = [
+    # โหลดฟอนต์ (เช็คโฟลเดอร์ fonts/ ในโปรเจกต์ก่อน แล้วค่อยเช็คฟอนต์ระบบ macOS / Windows / Linux)
+    local_fonts_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "fonts")
+    local_font_files = []
+    if os.path.isdir(local_fonts_dir):
+        local_font_files = [
+            os.path.join(local_fonts_dir, f)
+            for f in sorted(os.listdir(local_fonts_dir))
+            if f.lower().endswith((".ttf", ".ttc", ".otf"))
+        ]
+
+    font_paths = local_font_files + [
         "/System/Library/Fonts/Thonburi.ttc",
         "/System/Library/Fonts/Supplemental/Tahoma.ttf",
         "C:/Windows/Fonts/tahoma.ttf",
