@@ -1,0 +1,11 @@
+# ห้ามอัปโหลดไฟล์คีย์ลับเด็ดขาด! (ถ้าเผลออัปโหลด Discord จะรีเซ็ต Token ทันที)
+.env
+
+# ฐานข้อมูลและไฟล์ชั่วคราวในเครื่อง
+bot_data.db
+bot_data.db-journal
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.DS_Store
